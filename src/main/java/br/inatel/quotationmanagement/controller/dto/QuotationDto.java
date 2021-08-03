@@ -4,30 +4,29 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.inatel.quotationmanagement.model.Quotation;
 
 public class QuotationDto {
 	
-	private UUID id;
+	private String id;
 	private String stockId;
 	private Map<LocalDate, String> quotes;
 	
 	public QuotationDto(Quotation quotation) {
-		this.id = quotation.getId();
+		this.id = quotation.getUuid();
 		this.stockId = quotation.getStockId();
 		this.quotes = new HashMap<LocalDate, String>();
 		quotation.getQuotes().forEach(quote -> this.quotes.put(quote.getDate(), quote.getValue().toString()));
 	}
 
-	public UUID getId() {
+	public String getUuid() {
 		return id;
 	}
 	
-	public void setId(UUID id) {
-		this.id = id;
+	public void setUuid(String uuid) {
+		this.id = uuid;
 	}
 	
 	public String getStockId() {

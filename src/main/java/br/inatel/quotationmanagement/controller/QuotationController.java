@@ -23,10 +23,15 @@ import br.inatel.quotationmanagement.controller.form.QuotationForm;
 import br.inatel.quotationmanagement.model.Quotation;
 import br.inatel.quotationmanagement.repository.QuotationRepository;
 import br.inatel.quotationmanagement.repository.QuoteRepository;
+import br.inatel.quotationmanagement.service.Stock;
+import br.inatel.quotationmanagement.service.StockService;
 
 @RestController
 @RequestMapping("/quotation")
 public class QuotationController {
+	
+	@Autowired
+	private StockService stockService;
 	
 	@Autowired
 	private QuotationRepository quotationRepository;
@@ -44,11 +49,6 @@ public class QuotationController {
 	@GetMapping("/{stockId}")
 	public ResponseEntity<List<QuotationDto>> getByStockId(@PathVariable String stockId) {  
 		Optional<List<Quotation>> optional = quotationRepository.findAllByStockId(stockId);
-		
-		if (!optional.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-		
 		return ResponseEntity.ok(QuotationDto.convert(optional.get()));
 	}
 	
@@ -56,9 +56,24 @@ public class QuotationController {
 	@Transactional
 	@CacheEvict(value = "quotationList", allEntries = true)
 	public ResponseEntity<QuotationDto> create(@RequestBody QuotationForm form, UriComponentsBuilder uriBuilder) {
+		if (!stockIsRegistered(form.getStockId())) {
+			return ResponseEntity.notFound().build();
+		}
+		
 		Quotation quotation = form.convert(quoteRepository);
 		quotationRepository.save(quotation);
 		URI uri = uriBuilder.path("/quotation/{stockId}").buildAndExpand(quotation.getStockId()).toUri();
 		return ResponseEntity.created(uri).body(new QuotationDto(quotation));
+	}
+	
+	private boolean stockIsRegistered(String stockId) {
+		Stock[] stocks = stockService.getAllStocks();
+		for (Stock stock : stocks) {
+			if (stock.getId().equals(stockId)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

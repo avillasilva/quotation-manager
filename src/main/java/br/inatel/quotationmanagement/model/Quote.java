@@ -1,5 +1,6 @@
 package br.inatel.quotationmanagement.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -18,11 +19,11 @@ public class Quote {
 	private Quotation quotation; 
 	
 	private LocalDate date;
-	private Long value;
+	private BigDecimal value;
 	
 	public Quote() {}
 
-	public Quote(LocalDate date, Long value, Quotation quotation) {
+	public Quote(LocalDate date, BigDecimal value, Quotation quotation) {
 		this.date = date;
 		this.value = value;
 		this.quotation = quotation;
@@ -44,11 +45,19 @@ public class Quote {
 		this.date = date;
 	}
 
-	public Long getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 
-	public void setValue(Long value) {
+	public void setValue(BigDecimal value) {
 		this.value = value;
+	}
+	
+	public Quotation getQuotation() {
+		return quotation;
+	}
+	
+	public void setQuotation(Quotation quotation) {
+		this.quotation = quotation;
 	}
 }

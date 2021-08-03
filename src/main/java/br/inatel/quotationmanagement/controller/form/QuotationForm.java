@@ -1,5 +1,6 @@
 package br.inatel.quotationmanagement.controller.form;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class QuotationForm {
 	private String stockId;
 	
 	@NotNull @NotEmpty
-	private Map<LocalDate, Long> quotes;
+	private Map<LocalDate, BigDecimal> quotes;
 
 	public String getStockId() {
 		return stockId;
@@ -26,17 +27,21 @@ public class QuotationForm {
 		this.stockId = stockId;
 	}
 
-	public Map<LocalDate, Long> getQuotes() {
+	public Map<LocalDate, BigDecimal> getQuotes() {
 		return quotes;
 	}
 
-	public void setQuotes(Map<LocalDate, Long> quotes) {
+	public void setQuotes(Map<LocalDate, BigDecimal> quotes) {
 		this.quotes = quotes;
 	}
 	
 	public Quotation convert(QuoteRepository quoteRepository) {
 		Quotation quotation = new Quotation(stockId);
-		quotes.forEach((date, value) -> quoteRepository.save(new Quote(date, value, quotation)));
+		quotes.forEach((date, value) -> {
+			Quote quote = new Quote(date, value, quotation);
+			quotation.getQuotes().add(quote);
+			quoteRepository.save(quote);
+		});
 		return quotation;
 	}
 }

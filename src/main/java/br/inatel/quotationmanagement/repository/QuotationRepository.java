@@ -10,5 +10,4 @@ import br.inatel.quotationmanagement.model.Quotation;
 
 public interface QuotationRepository extends JpaRepository<Quotation, UUID> {
 	Optional<List<Quotation>> findAllByStockId(String stockId);
-	boolean existsByStockId(String stockId);
 }
