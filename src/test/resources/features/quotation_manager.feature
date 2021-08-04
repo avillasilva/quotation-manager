@@ -7,4 +7,5 @@ Feature: Add quotations
 		 Given a quotation with the stock id 'petr4'
 		 And a quote with date '2021-01-03' and value 11
 		 And a quote with date '2021-01-07' and value 17
-		 Then I should be able to access the quote with date '2021-01-03'
+		 When I send the request to register the quotations
+		 Then The response code should be 201
