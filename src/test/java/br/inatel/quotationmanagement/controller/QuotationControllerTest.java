@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import java.net.URI;
 
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class QuotationControllerTest {
 	
 	@Test
 	public void shouldCreateAQuotation() throws Exception {
-		URI uri = new URI("/quotation");
+		URI uri = new URI("/quotations");
 		JSONObject quotation = new JSONObject();
 		JSONObject quotes = new JSONObject();
 		

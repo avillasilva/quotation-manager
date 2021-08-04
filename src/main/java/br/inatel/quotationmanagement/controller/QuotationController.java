@@ -25,7 +25,7 @@ import br.inatel.quotationmanagement.repository.QuoteRepository;
 import br.inatel.quotationmanagement.service.StockService;
 
 @RestController
-@RequestMapping("/quotation")
+@RequestMapping("/quotations")
 public class QuotationController {
 	
 	private StockService stockService;
@@ -65,7 +65,7 @@ public class QuotationController {
 		
 		Quotation quotation = form.convert(quoteRepository);
 		quotationRepository.save(quotation);
-		URI uri = uriBuilder.path("/quotation/{stockId}").buildAndExpand(quotation.getStockId()).toUri();
+		URI uri = uriBuilder.path("/quotations/{stockId}").buildAndExpand(quotation.getStockId()).toUri();
 		return ResponseEntity.created(uri).body(new QuotationDto(quotation));
 	}
 	

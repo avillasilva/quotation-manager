@@ -16,6 +16,9 @@ public class StockService {
 	@Value("${stock-manager.url}")
 	private String API_URL;
 	
+	@Value("${server.port}")
+	private int serverPort;
+	
 	@Cacheable("stocks")
 	public Stock[] getAllStocks() {
 
@@ -47,7 +50,7 @@ public class StockService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		JSONObject notificationObject = new JSONObject();
 		notificationObject.put("host", "localhost");
-		notificationObject.put("port", 8081);
+		notificationObject.put("port", serverPort);
 		HttpEntity<String> request = new HttpEntity<String>(notificationObject.toString(), headers);
 		String response = restTemplate.postForObject(API_URL +  "/notification", request, String.class);
 		System.out.println(response);
