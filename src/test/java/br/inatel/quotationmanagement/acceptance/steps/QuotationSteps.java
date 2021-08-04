@@ -2,68 +2,86 @@ package br.inatel.quotationmanagement.acceptance.steps;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
-import org.json.JSONObject;
+import org.junit.Assert;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.inatel.quotationmanagement.controller.QuotationController;
+import br.inatel.quotationmanagement.controller.dto.QuotationDto;
+import br.inatel.quotationmanagement.controller.form.QuotationForm;
 import br.inatel.quotationmanagement.model.Quotation;
 import br.inatel.quotationmanagement.model.Quote;
 import br.inatel.quotationmanagement.repository.QuotationRepository;
-import io.cucumber.java.Before;
+import br.inatel.quotationmanagement.repository.QuoteRepository;
+import br.inatel.quotationmanagement.service.Stock;
+import br.inatel.quotationmanagement.service.StockService;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class QuotationSteps {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    private ResultActions response;
+	
+	@Mock
+	private StockService stockService;
+	
+	@Mock
+	private QuotationRepository quotationRepository;
+	
+	@Mock
+	private QuoteRepository quoteRepository;
+	
+    private QuotationController quotationController;
     
-    private JSONObject quotation;
-    private JSONObject quotes;
-	
-    @Before
-    public void setup() {
-        quotation = new JSONObject();
-        quotes = new JSONObject();
+    private QuotationForm quotationForm;
+    private ResponseEntity<QuotationDto> response;
+    
+    @Given("a quotation with the stock id {string}")
+    public void a_quotation_with_the_stock_id(String stockId) throws Exception {
+    	MockitoAnnotations.openMocks(this);
+    	
+    	Quotation quotation = new Quotation("petr4");
+    	List<Quotation> quotations = new ArrayList<Quotation>();
+    	quotations.add(quotation);
+    	
+    	List<Quote> quotes = new ArrayList<Quote>();
+    	quotes.add(new Quote(LocalDate.of(2021, 8, 12), new BigDecimal("14"), quotation));
+    	quotes.add(new Quote(LocalDate.of(2021, 8, 16), new BigDecimal("13"), quotation));
+    	
+    	Mockito.when(stockService.getStock("petr4")).thenReturn(new Stock("petr4"));
+    	Mockito.when(quotationRepository.findAllByStockId("petr4")).thenReturn(Optional.of(quotations));
+    	
+    	quotationController = new QuotationController(stockService, quotationRepository, quoteRepository);
+    	quotationForm = new QuotationForm();
+    	quotationForm.setStockId(stockId);
+    	quotationForm.setQuotes(new HashMap<LocalDate, BigDecimal>());
+    }
+    
+    @And("a {int} quotes to be added")
+    public void a_quotes_to_be_added(int numberOfQuotes) {
+    	int hundredYears = 100 * 365;
+    	for(int i = 0; i < numberOfQuotes; i++) {
+    	    LocalDate date = LocalDate.ofEpochDay(ThreadLocalRandom.current().nextInt(-hundredYears, hundredYears));
+    	    quotationForm.getQuotes().put(date, new BigDecimal("15"));
+    	}
     }
 	
-	@Given("a quotation with the stock id {string}")
-	public void a_quotation_with_the_stock_id(String stockId) throws Exception {
-		quotation.put("stockId", stockId);
-	}
-	
-	@And("a quote with date {string} and value {string}")
-	public void a_quote_with_date_and_value(String date, String value) throws Exception {
-		quotes.put(date, value);
-	}
-	
-	@When("I send the requests to register the quotations")
+	@When("I send the request to register the quotations")
 	public void i_send_the_request_to_register_the_quotations() throws Exception {
-        quotation.put("quotes", quotes);
-        
-        response = mockMvc.perform(MockMvcRequestBuilders
-            .post("/quotations")
-            .content(quotation.toString())
-            .contentType(MediaType.APPLICATION_JSON));
+		response = quotationController.create(quotationForm, UriComponentsBuilder.newInstance());
 	}
-	
-	@Then("the response code should be {string}")
-	public void the_response_code_should_be(String code) throws Exception {
-        response.andExpect(MockMvcResultMatchers.status().is(201));
-    }
+
+	@Then("the response http status should be {int}")
+	public void the_response_http_code_should_be_code(int code) {
+		Assert.assertEquals(code, response.getStatusCode().value());
+	}
 }

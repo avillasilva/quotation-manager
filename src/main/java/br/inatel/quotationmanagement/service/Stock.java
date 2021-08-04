@@ -9,6 +9,10 @@ public class Stock {
 	public String description;
 	
 	public Stock() {}
+	
+	public Stock(String stockId) {
+		this.id = stockId;
+	}
 
 	public String getId() {
 		return id;

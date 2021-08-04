@@ -13,9 +13,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>quotation-management</name>
 	<description>Application to manage stock quotes.</description>
+	
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -23,21 +22,21 @@ import br.inatel.quotationmanagement.controller.form.QuotationForm;
 import br.inatel.quotationmanagement.model.Quotation;
 import br.inatel.quotationmanagement.repository.QuotationRepository;
 import br.inatel.quotationmanagement.repository.QuoteRepository;
-import br.inatel.quotationmanagement.service.Stock;
 import br.inatel.quotationmanagement.service.StockService;
 
 @RestController
 @RequestMapping("/quotation")
 public class QuotationController {
 	
-	@Autowired
 	private StockService stockService;
-	
-	@Autowired
 	private QuotationRepository quotationRepository;
-	
-	@Autowired
 	private QuoteRepository quoteRepository;
+	
+	public QuotationController(StockService stockService, QuotationRepository quotationRepository, QuoteRepository quoteRepository) {
+		this.stockService = stockService;
+		this.quotationRepository = quotationRepository;
+		this.quoteRepository = quoteRepository;
+	}
 
 	@GetMapping
 	@Cacheable(value = "quotationList")
@@ -56,8 +55,12 @@ public class QuotationController {
 	@Transactional
 	@CacheEvict(value = "quotationList", allEntries = true)
 	public ResponseEntity<QuotationDto> create(@RequestBody QuotationForm form, UriComponentsBuilder uriBuilder) {
-		if (!stockIsRegistered(form.getStockId())) {
+		if (stockService.getStock(form.getStockId()) == null) {
 			return ResponseEntity.notFound().build();
+		}
+		
+		if (form.getQuotes().size() == 0) {
+			return ResponseEntity.badRequest().build();
 		}
 		
 		Quotation quotation = form.convert(quoteRepository);
@@ -66,14 +69,14 @@ public class QuotationController {
 		return ResponseEntity.created(uri).body(new QuotationDto(quotation));
 	}
 	
-	private boolean stockIsRegistered(String stockId) {
-		Stock[] stocks = stockService.getAllStocks();
-		for (Stock stock : stocks) {
-			if (stock.getId().equals(stockId)) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+//	private boolean stockIsRegistered(String stockId) {
+//		Stock[] stocks = stockService.getAllStocks();
+//		for (Stock stock : stocks) {
+//			if (stock.getId().equals(stockId)) {
+//				return true;
+//			}
+//		}
+//		
+//		return false;
+//	}
 }

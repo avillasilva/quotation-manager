@@ -21,11 +21,11 @@ public class QuotationDto {
 		quotation.getQuotes().forEach(quote -> this.quotes.put(quote.getDate(), quote.getValue().toString()));
 	}
 
-	public String getUuid() {
+	public String getId() {
 		return id;
 	}
 	
-	public void setUuid(String uuid) {
+	public void setId(String uuid) {
 		this.id = uuid;
 	}
 	

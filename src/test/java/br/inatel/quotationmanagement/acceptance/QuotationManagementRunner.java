@@ -1,12 +1,17 @@
 package br.inatel.quotationmanagement.acceptance;
 
 import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 
+import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
-@RunWith(SpringRunner.class)
+@RunWith(Cucumber.class)
 @CucumberOptions(features = "classpath:features")
+@SpringBootTest
+@ContextConfiguration(classes = SpringBootApplication.class)
 public class QuotationManagementRunner {
 	
 }
