@@ -43,7 +43,7 @@ public class QuotationSteps {
     private QuotationController quotationController;
     
     private QuotationForm quotationForm;
-    private ResponseEntity<QuotationDto> response;
+    private ResponseEntity<?> response;
     
     @Given("a quotation with the stock id {string}")
     public void a_quotation_with_the_stock_id(String stockId) throws Exception {

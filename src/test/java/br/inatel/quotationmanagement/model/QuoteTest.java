@@ -5,7 +5,6 @@ import java.time.LocalDate;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.context.ActiveProfiles;
 
 public class QuoteTest {
 	
@@ -16,6 +15,6 @@ public class QuoteTest {
 		
 		Assert.assertEquals(quote.getDate(), LocalDate.of(2021, 7, 8));
 		Assert.assertEquals(quote.getValue(), new BigDecimal("17"));
-		Assert.assertEquals("petr4", quote.getQuotation().getId());
+		Assert.assertEquals("petr5", quote.getQuotation().getStockId());
 	}
 }

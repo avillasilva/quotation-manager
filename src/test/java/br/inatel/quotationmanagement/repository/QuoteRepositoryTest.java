@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.inatel.quotationmanagement.model.Quotation;
@@ -17,6 +18,7 @@ import br.inatel.quotationmanagement.model.Quote;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@ActiveProfiles("test")
 public class QuoteRepositoryTest {
 	
 	@Autowired
@@ -37,7 +39,7 @@ public class QuoteRepositoryTest {
 	
 	@Test
 	public void shoudLoadAllByQuotationId() {
-		List<Quote> quotes = quoteRepository.findAllByQuotationId(Long.parseLong("1"));
+		List<Quote> quotes = quoteRepository.findAllByQuotationId(Long.parseLong("3"));
 		
 		Assert.assertEquals(quotes.size(), 3);
 		Assert.assertEquals(quotes.get(0).getValue(), new BigDecimal("14"));

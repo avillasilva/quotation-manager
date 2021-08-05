@@ -1,16 +1,8 @@
 package br.inatel.quotationmanagement;
 
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
-
-import br.inatel.quotationmanagement.service.StockService;
 
 @SpringBootApplication
 @EnableCaching
