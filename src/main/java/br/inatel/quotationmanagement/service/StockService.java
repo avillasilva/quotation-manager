@@ -45,6 +45,7 @@ public class StockService {
 		notificationObject.put("port", serverPort);
 		HttpEntity<String> request = new HttpEntity<String>(notificationObject.toString(), headers);
 		String response = restTemplate.postForObject(API_URL +  "/notification", request, String.class);
-		System.out.println(response);
+		
+		System.out.println("Registering application... Response received: " + response);
 	}
 }

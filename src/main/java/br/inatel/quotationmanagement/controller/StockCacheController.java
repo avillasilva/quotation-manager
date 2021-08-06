@@ -22,7 +22,9 @@ public class StockCacheController {
 	
 	@DeleteMapping("/stockcache")
 	public ResponseEntity<StockDto> cleanCache() {
+		
 		System.out.println("Clearing cache...");
+		
 		stockService.clearCache();
 		return ResponseEntity.ok().build();
 	}

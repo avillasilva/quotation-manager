@@ -24,3 +24,4 @@ Feature: quotation manager
 		|stockId |code |
 		|petr4   |200  |
 		|petr0   |404  |
+		
