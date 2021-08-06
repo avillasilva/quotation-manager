@@ -20,14 +20,7 @@ public class StockService {
 	private int serverPort;
 	
 	@Cacheable("stocks")
-	public Stock[] getAllStocks() {
-//		try {
-//			System.out.println("Retrieving all the stocks...");
-//			Thread.sleep(3000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-		 	
+	public Stock[] getAllStocks() { 	
 		RestTemplate restTemplate = new RestTemplate();
 		Stock[] stocks = restTemplate.getForObject(API_URL + "/stock", Stock[].class);
 		return stocks;
@@ -38,13 +31,6 @@ public class StockService {
 	
 	@Cacheable("stock")
 	public Stock getStock(String stockId) {
-//		try {
-//			System.out.println("Retrieving the stock...");
-//			Thread.sleep(3000);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-		
 		RestTemplate restTemplate = new RestTemplate();
 		String url = API_URL + "/stock/" + stockId;
 		return restTemplate.getForObject(url, Stock.class);
