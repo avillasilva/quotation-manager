@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import br.inatel.quotationmanagement.util.exceptions.IncorrectDateFormatException;
+import br.inatel.quotationmanagement.util.exceptions.IncorrectPriceFormatException;
+
 @RestControllerAdvice
 public class ValidationErrorHandler {
 	
@@ -32,5 +35,17 @@ public class ValidationErrorHandler {
 		});
 		
 		return dto;
+	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(IncorrectDateFormatException.class)
+	public ErrorFormDto handle(IncorrectDateFormatException exception) {
+		return new ErrorFormDto("quotes", exception.getMessage());
+	}
+	
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(IncorrectPriceFormatException.class)
+	public ErrorFormDto handle(IncorrectPriceFormatException exception) {
+		return new ErrorFormDto("quotes", exception.getMessage());
 	}
 }
