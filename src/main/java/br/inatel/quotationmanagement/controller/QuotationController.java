@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.inatel.quotationmanagement.config.validation.ErrorFormDto;
 import br.inatel.quotationmanagement.controller.dto.QuotationDto;
 import br.inatel.quotationmanagement.controller.form.QuotationForm;
 import br.inatel.quotationmanagement.model.Quotation;
@@ -52,9 +53,10 @@ public class QuotationController {
 		Optional<List<Quotation>> optional = quotationRepository.findAllByStockId(stockId);
 		
 		if(!optional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no stock in the database with id " + stockId);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new ErrorFormDto("stockId", "There is no stock in the database with id " + stockId));
 		}
-		
+
 		return ResponseEntity.ok(QuotationDto.convert(optional.get()));
 	}
 	
@@ -63,7 +65,8 @@ public class QuotationController {
 	@CacheEvict(value = "quotationList", allEntries = true)
 	public ResponseEntity<?> create(@RequestBody @Valid QuotationForm form, UriComponentsBuilder uriBuilder) {
 		if (stockService.getStock(form.getStockId()) == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There is no stock in the database with id " + form.getStockId());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				.body(new ErrorFormDto("stockId", "There is no stock in the database with id " + form.getStockId()));
 		}
 		
 		Quotation quotation = form.convert(quoteRepository);

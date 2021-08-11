@@ -14,12 +14,6 @@ public class StockCacheController {
 	@Autowired
 	private StockService stockService;
 	
-	@Autowired
-	public StockCacheController(StockService stockService) {
-		this.stockService = stockService;
-		this.stockService.registerApplication();
-	}
-	
 	@DeleteMapping("/stockcache")
 	public ResponseEntity<StockDto> cleanCache() {
 		

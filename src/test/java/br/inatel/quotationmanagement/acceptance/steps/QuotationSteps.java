@@ -1,5 +1,7 @@
 package br.inatel.quotationmanagement.acceptance.steps;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.junit.Assert;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -85,7 +86,7 @@ public class QuotationSteps {
 
 	@Then("the response http status should be {int}")
 	public void the_response_http_code_should_be_code(int code) {
-		Assert.assertEquals(code, response.getStatusCode().value());
+		assertEquals(code, response.getStatusCode().value());
 	}
 	
 	@When("I try to list the quotes with the stock id {string}")
