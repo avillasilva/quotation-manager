@@ -16,13 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.inatel.quotationmanagement.controller.QuotationController;
+import br.inatel.quotationmanagement.controller.dto.StockDto;
 import br.inatel.quotationmanagement.controller.form.QuotationForm;
 import br.inatel.quotationmanagement.controller.form.QuoteForm;
 import br.inatel.quotationmanagement.model.Quotation;
 import br.inatel.quotationmanagement.model.Quote;
 import br.inatel.quotationmanagement.repository.QuotationRepository;
 import br.inatel.quotationmanagement.repository.QuoteRepository;
-import br.inatel.quotationmanagement.service.Stock;
 import br.inatel.quotationmanagement.service.StockService;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -57,7 +57,7 @@ public class QuotationSteps {
     	quotes.add(new Quote(LocalDate.of(2021, 8, 12), new BigDecimal("14"), quotation));
     	quotes.add(new Quote(LocalDate.of(2021, 8, 16), new BigDecimal("13"), quotation));
     	
-    	Mockito.when(stockService.getStock("petr4")).thenReturn(new Stock("petr4"));
+    	Mockito.when(stockService.getStock("petr4")).thenReturn(new StockDto("petr4", "Petrobras PN"));
     	Mockito.when(quotationRepository.findAllByStockId("petr4")).thenReturn(Optional.of(quotations));
     	
     	quotationController = new QuotationController(stockService, quotationRepository, quoteRepository);

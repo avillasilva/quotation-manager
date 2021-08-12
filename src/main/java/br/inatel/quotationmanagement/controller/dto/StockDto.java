@@ -5,6 +5,11 @@ public class StockDto {
 	private String stockId;
 	private String description;
 	
+	public StockDto(String stockId, String description) {
+		this.stockId = stockId;
+		this.description = description;
+	}
+
 	public String getStockId() {
 		return stockId;
 	}

@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import br.inatel.quotationmanagement.controller.dto.StockDto;
+
 @Service
 public class StockService {
 	
@@ -27,9 +29,9 @@ public class StockService {
 	private int serverPort;
 	
 	@Cacheable("stocks")
-	public Stock[] getAllStocks() { 	
+	public StockDto[] getAllStocks() { 	
 		RestTemplate restTemplate = new RestTemplate();
-		Stock[] stocks = restTemplate.getForObject(API_URL + "/stock", Stock[].class);
+		StockDto[] stocks = restTemplate.getForObject(API_URL + "/stock", StockDto[].class);
 		return stocks;
 	}
 	
@@ -37,10 +39,10 @@ public class StockService {
 	public void clearCache() {}
 	
 	@Cacheable("stock")
-	public Stock getStock(String stockId) {
+	public StockDto getStock(String stockId) {
 		RestTemplate restTemplate = new RestTemplate();
 		String url = API_URL + "/stock/" + stockId;
-		return restTemplate.getForObject(url, Stock.class);
+		return restTemplate.getForObject(url, StockDto.class);
 	}
 
 	@EventListener(ApplicationReadyEvent.class)
