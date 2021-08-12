@@ -5,19 +5,16 @@ import static org.hamcrest.CoreMatchers.containsString;
 import java.net.URI;
 
 import org.json.JSONObject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -28,7 +25,7 @@ public class QuotationControllerTest {
 	
 	@Test
 	public void shouldCreateAQuotation() throws Exception {
-		URI uri = new URI("/quotation");
+		URI uri = new URI("/quotations");
 		JSONObject quotation = new JSONObject();
 		JSONObject quotes = new JSONObject();
 		
@@ -38,6 +35,8 @@ public class QuotationControllerTest {
 		
 		quotation.put("stockId", "petr4");
 		quotation.put("quotes", quotes);
+		
+		System.out.println(quotes.toString());
 		
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(uri)

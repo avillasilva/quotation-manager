@@ -1,12 +1,13 @@
 package br.inatel.quotationmanagement.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class QuotationTest {
 	
@@ -19,9 +20,9 @@ public class QuotationTest {
 		quotes.add(new Quote(LocalDate.of(2021, 8, 04), new BigDecimal("17"), quotation));
 		quotes.add(new Quote(LocalDate.of(2021, 8, 02), new BigDecimal("13"), quotation));
 		
-		Assert.assertEquals(quotes.size(), 3);
-		Assert.assertEquals(quotes.get(0).getDate(), LocalDate.of(2021, 8, 03));
-		Assert.assertEquals(quotes.get(1).getDate(), LocalDate.of(2021, 8, 04));
-		Assert.assertEquals(quotes.get(2).getDate(), LocalDate.of(2021, 8, 02));
+		assertEquals(quotes.size(), 3);
+		assertEquals(quotes.get(0).getDate(), LocalDate.of(2021, 8, 03));
+		assertEquals(quotes.get(1).getDate(), LocalDate.of(2021, 8, 04));
+		assertEquals(quotes.get(2).getDate(), LocalDate.of(2021, 8, 02));
 	}
 }

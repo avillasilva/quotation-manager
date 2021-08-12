@@ -1,14 +1,14 @@
 package br.inatel.quotationmanagement.acceptance.steps;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.junit.Assert;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -16,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.inatel.quotationmanagement.controller.QuotationController;
-import br.inatel.quotationmanagement.controller.dto.QuotationDto;
 import br.inatel.quotationmanagement.controller.form.QuotationForm;
+import br.inatel.quotationmanagement.controller.form.QuoteForm;
 import br.inatel.quotationmanagement.model.Quotation;
 import br.inatel.quotationmanagement.model.Quote;
 import br.inatel.quotationmanagement.repository.QuotationRepository;
@@ -43,10 +43,10 @@ public class QuotationSteps {
     private QuotationController quotationController;
     
     private QuotationForm quotationForm;
-    private ResponseEntity<QuotationDto> response;
+    private ResponseEntity<?> response;
     
-    @Given("a quotation with the stock id {string}")
-    public void a_quotation_with_the_stock_id(String stockId) throws Exception {
+    @Given("Some quotations registered in the database")
+    public void setup() {
     	MockitoAnnotations.openMocks(this);
     	
     	Quotation quotation = new Quotation("petr4");
@@ -61,9 +61,13 @@ public class QuotationSteps {
     	Mockito.when(quotationRepository.findAllByStockId("petr4")).thenReturn(Optional.of(quotations));
     	
     	quotationController = new QuotationController(stockService, quotationRepository, quoteRepository);
+    }
+    
+    @And("a quotation with the stock id {string}")
+    public void a_quotation_with_the_stock_id(String stockId) throws Exception {
     	quotationForm = new QuotationForm();
     	quotationForm.setStockId(stockId);
-    	quotationForm.setQuotes(new HashMap<LocalDate, BigDecimal>());
+    	quotationForm.setQuotes(new ArrayList<QuoteForm>());
     }
     
     @And("a {int} quotes to be added")
@@ -71,7 +75,7 @@ public class QuotationSteps {
     	int hundredYears = 100 * 365;
     	for(int i = 0; i < numberOfQuotes; i++) {
     	    LocalDate date = LocalDate.ofEpochDay(ThreadLocalRandom.current().nextInt(-hundredYears, hundredYears));
-    	    quotationForm.getQuotes().put(date, new BigDecimal("15"));
+    	    quotationForm.getQuotes().add(new QuoteForm(date.toString(), "15.00"));
     	}
     }
 	
@@ -82,6 +86,11 @@ public class QuotationSteps {
 
 	@Then("the response http status should be {int}")
 	public void the_response_http_code_should_be_code(int code) {
-		Assert.assertEquals(code, response.getStatusCode().value());
+		assertEquals(code, response.getStatusCode().value());
+	}
+	
+	@When("I try to list the quotes with the stock id {string}")
+	public void i_try_to_list_the_quotes_with_the_stock_id(String stockId) {
+		response = quotationController.getByStockId(stockId);
 	}
 }
