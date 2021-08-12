@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# quotation-manager
-
-A simple application to manager stock quotes.
-=======
 # Stock Quote Manager
 
 Spring Boot wep app to manage stock quotes.
@@ -17,4 +12,3 @@ This application allows you to manage quotes from the stock market. It allows yo
   - `docker-compose up -d`
 -   If you are using an IDE like Eclipse, just clone the project and import it. The IDE will install dependencies and you can run.
 - f you are using the command line, clone the project and run `maven install` in the root directory, then run `./mvnw spring-boot:run`.
->>>>>>> c609955497dfa06d1f7fae09b2f34ad36c5cb242
