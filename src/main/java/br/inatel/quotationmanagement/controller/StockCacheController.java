@@ -1,14 +1,9 @@
 package br.inatel.quotationmanagement.controller;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import br.inatel.quotationmanagement.controller.dto.StockDto;
 import br.inatel.quotationmanagement.service.StockService;
