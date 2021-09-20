@@ -16,7 +16,7 @@ public class QuoteForm {
 	
 	@NotNull
 	@NotEmpty
-	@Pattern(regexp = "^([0-9]*[.])?[0-9]+$", message = "Invalid format. The price must match the format 00.00.")
+	@Pattern(regexp = "^([0-9]*[.])?[0-9]+$", message = "Invalid format. The price must match the 00.00.")
 	private String price;
 	
 	public QuoteForm(String date, String price) {
