@@ -24,4 +24,21 @@ Feature: quotation manager
 		|stockId |code |
 		|petr4   |200  |
 		|petr0   |404  |
-		
+
+    Scenario: Add quotations
+            Given A stock with stock id '<stockId>'
+            And a quote with date '<date>' and price '<price>'
+            When I send the request to store the quotation
+            Then the response http status code should be <status> and the error should be '<error>'
+        
+        Examples:
+            | stockId	|    date    | price | status | error                                           |
+            | petr4		| 2021-05-21 | 17    |   200  |                                                 |
+            | petr0		| 2021-05-21 | 17    |   404  | There is no stock in the database with id petr0 |
+            |   		| 2021-05-21 | 17    |   400  | must not be empty                               |
+            | petr4	    | 2021-05-21 |       |   400  | must not be empty                               |
+            | petr4	    |            | 17    |   400  | must not be empty                               |
+            | petr4	    |            |       |   400  | must not be empty                               |
+            | petr4		| xxxxxxxxxx | 17    |   400  | Invalid format. The date must match YYYY-MM-DD  |
+            | petr4		| 2022-05-12 | xx    |   400  | Invalid format. The price must match 00.00      |
+            | petr4		| xxxxxxxxxx | xx    |   400  | Invalid format.                                 |
