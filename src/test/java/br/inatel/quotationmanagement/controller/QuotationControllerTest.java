@@ -58,8 +58,6 @@ public class QuotationControllerTest {
 		quotation.put("stockId", "petr4");
 		quotation.put("quotes", quotes);
 		
-		System.out.println(quotes.toString());
-		
 		mockMvc.perform(MockMvcRequestBuilders
 				.post(uri)
 				.content(quotation.toString())
