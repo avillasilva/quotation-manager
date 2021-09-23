@@ -3,6 +3,8 @@ package br.inatel.quotationmanagement.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import br.inatel.quotationmanagement.controller.dto.StockDto;
+import br.inatel.quotationmanagement.exception.StockNotFoundException;
 
 @Service
 public class StockService {
@@ -39,10 +42,16 @@ public class StockService {
 	public void clearCache() {}
 	
 	@Cacheable("stock")
-	public StockDto getStock(String stockId) {
-		RestTemplate restTemplate = new RestTemplate();
+	public StockDto validate(String stockId) throws StockNotFoundException {
 		String url = API_URL + "/stock/" + stockId;
-		return restTemplate.getForObject(url, StockDto.class);
+		RestTemplate restTemplate = new RestTemplate();
+		StockDto stockDto = restTemplate.getForObject(url, StockDto.class);
+		
+		if (stockDto == null) {
+			throw new StockNotFoundException("There is no stock in the database with id " + stockId);
+		}
+		
+		return stockDto;
 	}
 
 	@EventListener(ApplicationReadyEvent.class)

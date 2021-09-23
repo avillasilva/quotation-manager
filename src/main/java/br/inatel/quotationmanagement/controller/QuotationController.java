@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.inatel.quotationmanagement.config.validation.ErrorFormDto;
 import br.inatel.quotationmanagement.controller.dto.QuotationDto;
 import br.inatel.quotationmanagement.controller.form.QuotationForm;
+import br.inatel.quotationmanagement.exception.StockNotFoundException;
 import br.inatel.quotationmanagement.model.Quotation;
 import br.inatel.quotationmanagement.repository.QuotationRepository;
 import br.inatel.quotationmanagement.repository.QuoteRepository;
@@ -51,24 +50,14 @@ public class QuotationController {
 	@GetMapping("/{stockId}")
 	public ResponseEntity<?> getByStockId(@PathVariable String stockId) {  
 		Optional<List<Quotation>> optional = quotationRepository.findAllByStockId(stockId);
-		
-		if(!optional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new ErrorFormDto("stockId", "There is no stock in the database with id " + stockId));
-		}
-
 		return ResponseEntity.ok(QuotationDto.convert(optional.get()));
 	}
 	
 	@PostMapping
 	@Transactional
 	@CacheEvict(value = "quotationList", allEntries = true)
-	public ResponseEntity<?> create(@RequestBody @Valid QuotationForm form, UriComponentsBuilder uriBuilder) {
-		if (stockService.getStock(form.getStockId()) == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(new ErrorFormDto("stockId", "There is no stock in the database with id " + form.getStockId()));
-		}
-		
+	public ResponseEntity<?> create(@RequestBody @Valid QuotationForm form, UriComponentsBuilder uriBuilder) throws StockNotFoundException {
+		stockService.validate(form.getStockId());
 		Quotation quotation = form.convert(quoteRepository);
 		quotationRepository.save(quotation);
 		URI uri = uriBuilder.path("/quotations/{stockId}").buildAndExpand(quotation.getStockId()).toUri();

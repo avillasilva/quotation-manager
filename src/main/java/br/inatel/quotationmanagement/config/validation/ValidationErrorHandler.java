@@ -3,6 +3,8 @@ package br.inatel.quotationmanagement.config.validation;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import br.inatel.quotationmanagement.exception.StockNotFoundException;
 
 @RestControllerAdvice
 public class ValidationErrorHandler {
@@ -31,6 +35,13 @@ public class ValidationErrorHandler {
 			dto.add(error);
 		});
 		
+		return dto;
+	}
+
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(StockNotFoundException.class)
+	public ErrorFormDto handle(StockNotFoundException exception) {
+		ErrorFormDto dto = new ErrorFormDto("stockId", exception.getMessage());
 		return dto;
 	}
 }

@@ -45,7 +45,7 @@ public class QuotationControllerTest {
 	
 	@Test
 	public void shouldCreateAQuotation() throws Exception {
-		Mockito.when(stockService.getStock("petr4")).thenReturn(stocks.get(0));
+		Mockito.when(stockService.validate("petr4")).thenReturn(stocks.get(0));
 		
 		URI uri = new URI("/quotations");
 		JSONObject quotation = new JSONObject();

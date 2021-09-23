@@ -63,7 +63,7 @@ public class QuotationSteps {
     private ResponseEntity<?> response;
     
     @Given("Some quotations registered in the database")
-    public void setup() {
+    public void setup() throws Exception {
     	MockitoAnnotations.openMocks(this);
     	
     	Quotation quotation = new Quotation("petr4");
@@ -74,7 +74,7 @@ public class QuotationSteps {
     	quotes.add(new Quote(LocalDate.of(2021, 8, 12), new BigDecimal("14"), quotation));
     	quotes.add(new Quote(LocalDate.of(2021, 8, 16), new BigDecimal("13"), quotation));
     	
-    	Mockito.when(stockService.getStock("petr4")).thenReturn(new StockDto("petr4", "Petrobras PN"));
+    	Mockito.when(stockService.validate("petr4")).thenReturn(new StockDto("petr4", "Petrobras PN"));
     	Mockito.when(quotationRepository.findAllByStockId("petr4")).thenReturn(Optional.of(quotations));
     	
     	quotationController = new QuotationController(stockService, quotationRepository, quoteRepository);
