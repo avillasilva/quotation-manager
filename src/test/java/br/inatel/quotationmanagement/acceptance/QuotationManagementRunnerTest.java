@@ -1,9 +1,10 @@
 package br.inatel.quotationmanagement.acceptance;
 
-import io.cucumber.junit.platform.engine.Cucumber;
-import io.cucumber.spring.CucumberContextConfiguration;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
 
-// @Cucumber
-// @CucumberContextConfiguration
+@RunWith(Cucumber.class)
+@CucumberOptions(features = "classpath:features")
 public class QuotationManagementRunnerTest {
 }

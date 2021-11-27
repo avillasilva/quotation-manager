@@ -3,7 +3,7 @@ Feature: quotation manager
 	I want to register the quotation of some dates
 	So I can access the quotations in the future
 
-	Scenario: Add quotations
+	Scenario Outline: Add quotations
 		 Given Some quotations registered in the database
 		 And a quotation with the stock id '<stockId>'
 		 And a <numberOfQuotes> quotes to be added
@@ -15,7 +15,7 @@ Feature: quotation manager
 		|petr4   |3              |201  |
 		|petr0   |3              |404  |
 
-	Scenario: list a stock quote
+	Scenario Outline: list a stock quote
 		Given Some quotations registered in the database
 		When I try to list the quotes with the stock id '<stockId>'
 		Then the response http status should be <code>
@@ -25,7 +25,7 @@ Feature: quotation manager
 		|petr4   |200  |
 		|petr0   |404  |
 
-    Scenario: Add quotations
+    Scenario Outline: Add quotations
             Given A stock with stock id '<stockId>'
             And a quote with date '<date>' and price '<price>'
             When I send the request to store the quotation

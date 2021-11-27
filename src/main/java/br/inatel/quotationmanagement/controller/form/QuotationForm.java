@@ -46,8 +46,8 @@ public class QuotationForm {
 	
 	public Quotation convert(QuoteRepository quoteRepository) {
 		Quotation quotation = new Quotation(stockId);
-		quotes.forEach(quoteform -> {
-			Quote quote = new Quote(LocalDate.parse(quoteform.getDate()), new BigDecimal(quoteform.getPrice()), quotation);
+		quotes.forEach(quoteForm -> {
+			Quote quote = new Quote(LocalDate.parse(quoteForm.getDate()), new BigDecimal(quoteForm.getPrice()), quotation);
 			quotation.getQuotes().add(quote);
 			quoteRepository.save(quote);
 		});

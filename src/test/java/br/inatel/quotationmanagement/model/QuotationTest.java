@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class QuotationTest {
 	
 	@Test
-	public void shouldCreateQuoatation() {
+	public void shouldCreateQuotation() {
 		Quotation quotation = new Quotation("petr4");
 		
 		List<Quote> quotes = new ArrayList<>();
@@ -20,7 +20,7 @@ public class QuotationTest {
 		quotes.add(new Quote(LocalDate.of(2021, 8, 04), new BigDecimal("17"), quotation));
 		quotes.add(new Quote(LocalDate.of(2021, 8, 02), new BigDecimal("13"), quotation));
 		
-		assertEquals(quotes.size(), 3);
+		assertEquals(3, quotes.size());
 		assertEquals(quotes.get(0).getDate(), LocalDate.of(2021, 8, 03));
 		assertEquals(quotes.get(1).getDate(), LocalDate.of(2021, 8, 04));
 		assertEquals(quotes.get(2).getDate(), LocalDate.of(2021, 8, 02));

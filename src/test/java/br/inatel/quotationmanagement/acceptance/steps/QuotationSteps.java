@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
+import br.inatel.quotationmanagement.exception.StockNotFoundException;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -43,7 +44,7 @@ import io.cucumber.java.en.When;
 @AutoConfigureMockMvc
 public class QuotationSteps {
 	
-	@MockBean
+	@Mock
 	private StockService stockService;
 	
 	@Mock
@@ -67,15 +68,17 @@ public class QuotationSteps {
     	MockitoAnnotations.openMocks(this);
     	
     	Quotation quotation = new Quotation("petr4");
-    	List<Quotation> quotations = new ArrayList<Quotation>();
+    	List<Quotation> quotations = new ArrayList();
     	quotations.add(quotation);
     	
-    	List<Quote> quotes = new ArrayList<Quote>();
+    	List<Quote> quotes = new ArrayList();
     	quotes.add(new Quote(LocalDate.of(2021, 8, 12), new BigDecimal("14"), quotation));
     	quotes.add(new Quote(LocalDate.of(2021, 8, 16), new BigDecimal("13"), quotation));
     	
     	Mockito.when(stockService.validate("petr4")).thenReturn(new StockDto("petr4", "Petrobras PN"));
     	Mockito.when(quotationRepository.findAllByStockId("petr4")).thenReturn(Optional.of(quotations));
+
+		Mockito.when(stockService.validate("petr0")).thenThrow(new StockNotFoundException("petr0"));
     	
     	quotationController = new QuotationController(stockService, quotationRepository, quoteRepository);
     }
@@ -84,7 +87,7 @@ public class QuotationSteps {
     public void a_quotation_with_the_stock_id(String stockId) throws Exception {
     	quotationForm = new QuotationForm();
     	quotationForm.setStockId(stockId);
-    	quotationForm.setQuotes(new ArrayList<QuoteForm>());
+    	quotationForm.setQuotes(new ArrayList());
     }
     
     @And("a {int} quotes to be added")
@@ -127,9 +130,9 @@ public class QuotationSteps {
 	@When("I send the request to store the quotation")
 	public void i_send_the_request_to_store_the_quotation() throws Exception {
 		result = mockMvc.perform(MockMvcRequestBuilders
-								.post(new URI("/quotations"))
-								.content(request.asString())
-								.contentType(MediaType.APPLICATION_JSON));
+				.post(new URI("/quotations"))
+				.content(request.asString())
+				.contentType(MediaType.APPLICATION_JSON));
 	}
 	
 	@Then("the response http status code should be {int} and the error should be {string}")

@@ -46,7 +46,7 @@ public class StockService {
 		StockDto stockDto = restTemplate.getForObject(url, StockDto.class);
 		
 		if (stockDto == null) {
-			throw new StockNotFoundException("There is no stock in the database with id " + stockId);
+			throw new StockNotFoundException(stockId);
 		}
 		
 		return stockDto;

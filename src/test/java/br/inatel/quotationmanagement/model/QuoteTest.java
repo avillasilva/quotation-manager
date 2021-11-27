@@ -14,8 +14,8 @@ public class QuoteTest {
 		Quotation quotation = new Quotation("petr5");
 		Quote quote = new Quote(LocalDate.of(2021, 7, 8), new BigDecimal("17"), quotation);
 		
-		assertEquals(quote.getDate(), LocalDate.of(2021, 7, 8));
-		assertEquals(quote.getValue(), new BigDecimal("17"));
+		assertEquals(LocalDate.of(2021, 7, 8), quote.getDate());
+		assertEquals(new BigDecimal("17"), quote.getValue());
 		assertEquals("petr5", quote.getQuotation().getStockId());
 	}
 }

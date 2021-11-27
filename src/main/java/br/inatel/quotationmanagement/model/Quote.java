@@ -17,7 +17,7 @@ public class Quote {
 	
 	@ManyToOne
 	private Quotation quotation; 
-	
+
 	private LocalDate date;
 	private BigDecimal value;
 	

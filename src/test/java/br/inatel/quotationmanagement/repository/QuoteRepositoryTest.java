@@ -18,7 +18,10 @@ import br.inatel.quotationmanagement.model.Quote;
 @DataJpaTest
 @ActiveProfiles("test")
 public class QuoteRepositoryTest {
-	
+
+	@Autowired
+	private QuotationRepository quotationRepository;
+
 	@Autowired
 	private QuoteRepository quoteRepository;
 
@@ -26,17 +29,20 @@ public class QuoteRepositoryTest {
 	private TestEntityManager em;
 	
 	@Test
-	public void shoudLoadAllByQuotationId() {
-		Quotation quotation = new Quotation("petr4");
-		
-		em.persist(quotation);
+	public void shouldLoadAllByQuotationId() {
+		em.persist(new Quotation("test"));
+
+		List<Quotation> quotations = quotationRepository.findAllByStockId("test").get();
+		assertEquals(1, quotations.size());
+
+		Quotation quotation = quotations.get(0);
 		em.persist(new Quote(LocalDate.of(2021, 3, 7), new BigDecimal("14"), quotation));
 		em.persist(new Quote(LocalDate.of(2021, 3, 12), new BigDecimal("17"), quotation));
 		em.persist(new Quote(LocalDate.of(2021, 3, 17), new BigDecimal("18"), quotation));
 		
-		List<Quote> quotes = quoteRepository.findAllByQuotationId(Long.parseLong("3"));
-		assertEquals(quotes.size(), 3);
-		assertEquals(quotes.get(0).getValue(), new BigDecimal("14"));
+		List<Quote> quotes = quoteRepository.findAllByQuotationId(quotation.getId());
+		assertEquals(3, quotes.size());
+		assertEquals(new BigDecimal("14"), quotes.get(0).getValue());
 	}
 
 }
