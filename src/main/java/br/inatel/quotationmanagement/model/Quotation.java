@@ -13,53 +13,56 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Quotation {
-	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private String uuid;
-	private String stockId;
-	
-	@OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
-	private List<Quote> quotes;
-	
-	public Quotation() {}
-	
-	public Quotation(String stockId) {
-		this.stockId = stockId;
-		this.quotes = new ArrayList<Quote>();
-		this.uuid = UUID.randomUUID().toString();
-	}
 
-	public Long getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private String uuid;
+    private String stockId;
 
-	public String getUuid() {
-		return uuid;
-	}
+    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
+    private List<Quote> quotes;
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public Quotation() {
+    }
 
-	public String getStockId() {
-		return stockId;
-	}
+    public Quotation(String stockId) {
+        this.stockId = stockId;
+        this.quotes = new ArrayList<Quote>();
+        this.uuid = UUID.randomUUID().toString();
+    }
 
-	public void setStockId(String stockId) {
-		this.stockId = stockId;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public List<Quote> getQuotes() {
-		return quotes;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setQuotes(List<Quote> quotes) {
-		this.quotes = quotes;
-	}
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(String stockId) {
+        this.stockId = stockId;
+    }
+
+    public List<Quote> getQuotes() {
+        return quotes;
+    }
+
+    public void setQuotes(List<Quote> quotes) {
+        this.quotes = quotes;
+    }
+
 }

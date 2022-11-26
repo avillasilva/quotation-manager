@@ -17,29 +17,32 @@ import br.inatel.quotationmanagement.exception.StockNotFoundException;
 
 @RestControllerAdvice
 public class ValidationErrorHandler {
-	
-	@Autowired
-	private MessageSource messageSource;
-	
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public List<ErrorFormDto> handle(MethodArgumentNotValidException exception) {
-		List<ErrorFormDto> dto = new ArrayList<>();
-		
-		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-		fieldErrors.forEach(e -> {
-			String msg = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-			ErrorFormDto error = new ErrorFormDto(e.getField(), msg);
-			dto.add(error);
-		});
-		
-		return dto;
-	}
 
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(StockNotFoundException.class)
-	public ErrorFormDto handle(StockNotFoundException exception) {
-		ErrorFormDto dto = new ErrorFormDto("stockId", exception.getMessage());
-		return dto;
-	}
+    @Autowired
+    private MessageSource messageSource;
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public List<ErrorFormDto> handle(MethodArgumentNotValidException exception) {
+        List<ErrorFormDto> dto = new ArrayList<>();
+
+        List<FieldError> fieldErrors = exception.getBindingResult()
+                .getFieldErrors();
+        fieldErrors.forEach(e -> {
+            String msg = messageSource.getMessage(e,
+                    LocaleContextHolder.getLocale());
+            ErrorFormDto error = new ErrorFormDto(e.getField(), msg);
+            dto.add(error);
+        });
+
+        return dto;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(StockNotFoundException.class)
+    public ErrorFormDto handle(StockNotFoundException exception) {
+        ErrorFormDto dto = new ErrorFormDto("stockId", exception.getMessage());
+        return dto;
+    }
+
 }

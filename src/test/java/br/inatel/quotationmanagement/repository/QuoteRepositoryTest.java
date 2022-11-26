@@ -19,30 +19,30 @@ import br.inatel.quotationmanagement.model.Quote;
 @ActiveProfiles("test")
 public class QuoteRepositoryTest {
 
-	@Autowired
-	private QuotationRepository quotationRepository;
+    @Autowired
+    private QuotationRepository quotationRepository;
 
-	@Autowired
-	private QuoteRepository quoteRepository;
+    @Autowired
+    private QuoteRepository quoteRepository;
 
-	@Autowired
-	private TestEntityManager em;
-	
-	@Test
-	public void shouldLoadAllByQuotationId() {
-		em.persist(new Quotation("test"));
+    @Autowired
+    private TestEntityManager em;
 
-		List<Quotation> quotations = quotationRepository.findAllByStockId("test").get();
-		assertEquals(1, quotations.size());
+    @Test
+    public void shouldLoadAllByQuotationId() {
+        em.persist(new Quotation("test"));
 
-		Quotation quotation = quotations.get(0);
-		em.persist(new Quote(LocalDate.of(2021, 3, 7), new BigDecimal("14"), quotation));
-		em.persist(new Quote(LocalDate.of(2021, 3, 12), new BigDecimal("17"), quotation));
-		em.persist(new Quote(LocalDate.of(2021, 3, 17), new BigDecimal("18"), quotation));
-		
-		List<Quote> quotes = quoteRepository.findAllByQuotationId(quotation.getId());
-		assertEquals(3, quotes.size());
-		assertEquals(new BigDecimal("14"), quotes.get(0).getValue());
-	}
+        List<Quotation> quotations = quotationRepository.findAllByStockId("test").get();
+        assertEquals(1, quotations.size());
+
+        Quotation quotation = quotations.get(0);
+        em.persist(new Quote(LocalDate.of(2021, 3, 7), new BigDecimal("14"), quotation));
+        em.persist(new Quote(LocalDate.of(2021, 3, 12), new BigDecimal("17"), quotation));
+        em.persist(new Quote(LocalDate.of(2021, 3, 17), new BigDecimal("18"), quotation));
+
+        List<Quote> quotes = quoteRepository.findAllByQuotationId(quotation.getId());
+        assertEquals(3, quotes.size());
+        assertEquals(new BigDecimal("14"), quotes.get(0).getValue());
+    }
 
 }

@@ -10,16 +10,17 @@ import br.inatel.quotationmanagement.service.StockService;
 
 @RestController
 public class StockCacheController {
-	
-	@Autowired
-	private StockService stockService;
-	
-	@DeleteMapping("/stockcache")
-	public ResponseEntity<StockDto> cleanCache() {
-		
-		System.out.println("Clearing cache...");
-		
-		stockService.clearCache();
-		return ResponseEntity.ok().build();
-	}
+
+    @Autowired
+    private StockService stockService;
+
+    @DeleteMapping("/stockcache")
+    public ResponseEntity<StockDto> cleanCache() {
+
+        System.out.println("Clearing cache...");
+
+        stockService.clearCache();
+        return ResponseEntity.ok().build();
+    }
+
 }

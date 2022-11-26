@@ -11,53 +11,56 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class Quote {
-	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	@ManyToOne
-	private Quotation quotation; 
 
-	private LocalDate date;
-	private BigDecimal value;
-	
-	public Quote() {}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public Quote(LocalDate date, BigDecimal value, Quotation quotation) {
-		this.date = date;
-		this.value = value;
-		this.quotation = quotation;
-	}
+    @ManyToOne
+    private Quotation quotation;
 
-	public Long getId() {
-		return id;
-	}
+    private LocalDate date;
+    private BigDecimal value;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Quote() {
+    }
 
-	public LocalDate getDate() {
-		return date;
-	}
+    public Quote(LocalDate date, BigDecimal value, Quotation quotation) {
+        this.date = date;
+        this.value = value;
+        this.quotation = quotation;
+    }
 
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public BigDecimal getValue() {
-		return value;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setValue(BigDecimal value) {
-		this.value = value;
-	}
-	
-	public Quotation getQuotation() {
-		return quotation;
-	}
-	
-	public void setQuotation(Quotation quotation) {
-		this.quotation = quotation;
-	}
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public BigDecimal getValue() {
+        return value;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
+    public Quotation getQuotation() {
+        return quotation;
+    }
+
+    public void setQuotation(Quotation quotation) {
+        this.quotation = quotation;
+    }
+
 }

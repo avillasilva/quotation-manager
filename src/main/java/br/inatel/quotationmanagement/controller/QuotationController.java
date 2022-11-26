@@ -29,38 +29,39 @@ import br.inatel.quotationmanagement.service.StockService;
 @RestController
 @RequestMapping("/quotations")
 public class QuotationController {
-	
-	private StockService stockService;
-	private QuotationRepository quotationRepository;
-	private QuoteRepository quoteRepository;
-	
-	public QuotationController(StockService stockService, QuotationRepository quotationRepository, QuoteRepository quoteRepository) {
-		this.stockService = stockService;
-		this.quotationRepository = quotationRepository;
-		this.quoteRepository = quoteRepository;
-	}
 
-	@GetMapping
-	@Cacheable(value = "quotationList")
-	public ResponseEntity<?> list() {
-		List<Quotation> quotations = quotationRepository.findAll();
-		return ResponseEntity.ok(QuotationDto.convert(quotations));
-	}
-	
-	@GetMapping("/{stockId}")
-	public ResponseEntity<?> getByStockId(@PathVariable String stockId) {  
-		Optional<List<Quotation>> optional = quotationRepository.findAllByStockId(stockId);
-		return ResponseEntity.ok(QuotationDto.convert(optional.get()));
-	}
-	
-	@PostMapping
-	@Transactional
-	@CacheEvict(value = "quotationList", allEntries = true)
-	public ResponseEntity<?> create(@RequestBody @Valid QuotationForm form, UriComponentsBuilder uriBuilder) throws StockNotFoundException {
-		stockService.validate(form.getStockId());
-		Quotation quotation = form.convert(quoteRepository);
-		quotationRepository.save(quotation);
-		URI uri = uriBuilder.path("/quotations/{stockId}").buildAndExpand(quotation.getStockId()).toUri();
-		return ResponseEntity.created(uri).body(new QuotationDto(quotation));
-	}
+    private StockService stockService;
+    private QuotationRepository quotationRepository;
+    private QuoteRepository quoteRepository;
+
+    public QuotationController(StockService stockService, QuotationRepository quotationRepository, QuoteRepository quoteRepository) {
+        this.stockService = stockService;
+        this.quotationRepository = quotationRepository;
+        this.quoteRepository = quoteRepository;
+    }
+
+    @GetMapping
+    @Cacheable(value = "quotationList")
+    public ResponseEntity<?> list() {
+        List<Quotation> quotations = quotationRepository.findAll();
+        return ResponseEntity.ok(QuotationDto.convert(quotations));
+    }
+
+    @GetMapping("/{stockId}")
+    public ResponseEntity<?> getByStockId(@PathVariable String stockId) {
+        Optional<List<Quotation>> optional = quotationRepository.findAllByStockId(stockId);
+        return ResponseEntity.ok(QuotationDto.convert(optional.get()));
+    }
+
+    @PostMapping
+    @Transactional
+    @CacheEvict(value = "quotationList", allEntries = true)
+    public ResponseEntity<?> create(@RequestBody @Valid QuotationForm form, UriComponentsBuilder uriBuilder) throws StockNotFoundException {
+        stockService.validate(form.getStockId());
+        Quotation quotation = form.convert(quoteRepository);
+        quotationRepository.save(quotation);
+        URI uri = uriBuilder.path("/quotations/{stockId}").buildAndExpand(quotation.getStockId()).toUri();
+        return ResponseEntity.created(uri).body(new QuotationDto(quotation));
+    }
+
 }
